@@ -2,130 +2,130 @@
 
 - [x] 1.1 Initialize Python project structure with `src/` and `tests/` directories
 - [x] 1.2 Create `pyproject.toml` with project metadata, dependencies (pyyaml, plyer, httpx), and CLI entry point
-- [ ] 1.3 Set up development environment: virtualenv, pytest for testing, black for formatting, mypy for type checking
-- [ ] 1.4 Create GitHub repository with README, LICENSE, and basic documentation structure
-- [ ] 1.5 Configure CI/CD pipeline (GitHub Actions) for running tests and building distributions
+- [x] 1.3 Set up development environment: virtualenv, pytest for testing, black for formatting, mypy for type checking
+- [x] 1.4 Create GitHub repository with README, LICENSE, and basic documentation structure
+- [x] 1.5 Configure CI/CD pipeline (GitHub Actions) for running tests and building distributions
 
 ## 2. Configuration Management
 
-- [ ] 2.1 Define configuration data models using Pydantic for validation (retry settings, git settings, notification settings)
-- [ ] 2.2 Implement config file loader for YAML at `~/.git-submit/config.yaml` with default fallback values
-- [ ] 2.3 Implement environment variable interpolation for sensitive fields (e.g., `password_env: SMTP_PASSWORD`)
-- [ ] 2.4 Add CLI flag parser with precedence: CLI flags > config file > defaults
-- [ ] 2.5 Implement `git-submit config init` command to create default config file with documented examples
-- [ ] 2.6 Implement `git-submit config edit` command to open config in default editor
-- [ ] 2.7 Implement `git-submit config validate` command with schema validation and error reporting
-- [ ] 2.8 Implement `git-submit config show` command to display effective configuration
+- [x] 2.1 Define configuration data models using Pydantic for validation (retry settings, git settings, notification settings)
+- [x] 2.2 Implement config file loader for YAML at `~/.git-submit/config.yaml` with default fallback values
+- [x] 2.3 Implement environment variable interpolation for sensitive fields (e.g., `password_env: SMTP_PASSWORD`)
+- [x] 2.4 Add CLI flag parser with precedence: CLI flags > config file > defaults
+- [x] 2.5 Implement `git-submit config init` command to create default config file with documented examples
+- [x] 2.6 Implement `git-submit config edit` command to open config in default editor
+- [x] 2.7 Implement `git-submit config validate` command with schema validation and error reporting
+- [x] 2.8 Implement `git-submit config show` command to display effective configuration
 
 ## 3. Git Integration and Retry Engine
 
-- [ ] 3.1 Create git wrapper module using subprocess to invoke `git push` commands
-- [ ] 3.2 Implement git availability check (`git --version`) with fail-fast error message
-- [ ] 3.3 Implement branch detection (`git branch --show-current`) with fallback to config default
-- [ ] 3.4 Implement retry loop with exponential backoff: `delay = min(max, initial * 2^(n-1))`
-- [ ] 3.5 Add randomized jitter (±25%) to backoff intervals to prevent thundering herd
-- [ ] 3.6 Implement success detection: check git push exit code 0 and optional `git ls-remote` verification
-- [ ] 3.7 Capture and log git stdout/stderr for each retry attempt
-- [ ] 3.8 Detect permanent error patterns (repository not found, 404, permission denied) with WARNING logs
-- [ ] 3.9 Implement `--dry-run` flag for testing without actual git push
+- [x] 3.1 Create git wrapper module using subprocess to invoke `git push` commands
+- [x] 3.2 Implement git availability check (`git --version`) with fail-fast error message
+- [x] 3.3 Implement branch detection (`git branch --show-current`) with fallback to config default
+- [x] 3.4 Implement retry loop with exponential backoff: `delay = min(max, initial * 2^(n-1))`
+- [x] 3.5 Add randomized jitter (±25%) to backoff intervals to prevent thundering herd
+- [x] 3.6 Implement success detection: check git push exit code 0 and optional `git ls-remote` verification
+- [x] 3.7 Capture and log git stdout/stderr for each retry attempt
+- [x] 3.8 Detect permanent error patterns (repository not found, 404, permission denied) with WARNING logs
+- [x] 3.9 Implement `--dry-run` flag for testing without actual git push
 
 ## 4. State Persistence and Recovery
 
-- [ ] 4.1 Design state file schema with fields: operation_id, started_at, attempts, last_attempt_at, last_error, repository, branch, remote
-- [ ] 4.2 Implement atomic state file write (write to temp file + rename) for crash safety
-- [ ] 4.3 Create state directory structure at `~/.git-submit/state/`
-- [ ] 4.4 Generate unique operation ID based on repository path + branch name
-- [ ] 4.5 Implement state file creation on operation start
-- [ ] 4.6 Implement state file update after each retry attempt
-- [ ] 4.7 Implement state file cleanup on successful completion
-- [ ] 4.8 Implement resume logic: detect existing state file on startup and continue retrying
-- [ ] 4.9 Implement `git-submit status` command to display active operation details
-- [ ] 4.10 Implement `git-submit status --orphaned` to list stale state files (>24 hours old)
-- [ ] 4.11 Implement `git-submit cleanup` command to remove orphaned state files
+- [x] 4.1 Design state file schema with fields: operation_id, started_at, attempts, last_attempt_at, last_error, repository, branch, remote
+- [x] 4.2 Implement atomic state file write (write to temp file + rename) for crash safety
+- [x] 4.3 Create state directory structure at `~/.git-submit/state/`
+- [x] 4.4 Generate unique operation ID based on repository path + branch name
+- [x] 4.5 Implement state file creation on operation start
+- [x] 4.6 Implement state file update after each retry attempt
+- [x] 4.7 Implement state file cleanup on successful completion
+- [x] 4.8 Implement resume logic: detect existing state file on startup and continue retrying
+- [x] 4.9 Implement `git-submit status` command to display active operation details
+- [x] 4.10 Implement `git-submit status --orphaned` to list stale state files (>24 hours old)
+- [x] 4.11 Implement `git-submit cleanup` command to remove orphaned state files
 
 ## 5. Structured Logging
 
-- [ ] 5.1 Design log entry schema with fields: timestamp, level, event, attempt, error, repository, branch
-- [ ] 5.2 Create log directory structure at `~/.git-submit/logs/` with daily rotation
-- [ ] 5.3 Implement JSON log writer with structured formatting
-- [ ] 5.4 Implement log levels: DEBUG, INFO, WARNING, ERROR
-- [ ] 5.5 Add logging for retry attempts (attempt number, timestamp, backoff interval)
-- [ ] 5.6 Add logging for git push output (stdout/stderr capture)
-- [ ] 5.7 Add logging for success completion (duration, attempt count, commit SHA)
-- [ ] 5.8 Implement `--verbose` flag: print human-readable log entries to stdout
-- [ ] 5.9 Implement `--json` flag: print raw JSON log entries to stdout
-- [ ] 5.10 Implement `--quiet` flag: suppress all stdout output (logs only written to file)
-- [ ] 5.11 Implement `--follow` flag: tail log file in real-time during retry loop
+- [x] 5.1 Design log entry schema with fields: timestamp, level, event, attempt, error, repository, branch
+- [x] 5.2 Create log directory structure at `~/.git-submit/logs/` with daily rotation
+- [x] 5.3 Implement JSON log writer with structured formatting
+- [x] 5.4 Implement log levels: DEBUG, INFO, WARNING, ERROR
+- [x] 5.5 Add logging for retry attempts (attempt number, timestamp, backoff interval)
+- [x] 5.6 Add logging for git push output (stdout/stderr capture)
+- [x] 5.7 Add logging for success completion (duration, attempt count, commit SHA)
+- [x] 5.8 Implement `--verbose` flag: print human-readable log entries to stdout
+- [x] 5.9 Implement `--json` flag: print raw JSON log entries to stdout
+- [x] 5.10 Implement `--quiet` flag: suppress all stdout output (logs only written to file)
+- [x] 5.11 Implement `--follow` flag: tail log file in real-time during retry loop
 
 ## 6. Email Notifications
 
-- [ ] 6.1 Create email notification module using Python's built-in `smtplib`
-- [ ] 6.2 Implement SMTP connection with TLS/SSL support
-- [ ] 6.3 Implement SMTP authentication with username/password from config
-- [ ] 6.4 Create default email template with variables: repo, branch, commit, attempts, duration, timestamp
-- [ ] 6.5 Implement simple `{{variable}}` template substitution for custom email templates
-- [ ] 6.6 Add email template validation on startup (check required variables present)
-- [ ] 6.7 Implement graceful error handling: log SMTP failures without crashing main operation
-- [ ] 6.8 Add `--notify-email` CLI flag to enable email notifications
-- [ ] 6.9 Add `--no-notify` CLI flag to disable all notifications
+- [x] 6.1 Create email notification module using Python's built-in `smtplib`
+- [x] 6.2 Implement SMTP connection with TLS/SSL support
+- [x] 6.3 Implement SMTP authentication with username/password from config
+- [x] 6.4 Create default email template with variables: repo, branch, commit, attempts, duration, timestamp
+- [x] 6.5 Implement simple `{{variable}}` template substitution for custom email templates
+- [x] 6.6 Add email template validation on startup (check required variables present)
+- [x] 6.7 Implement graceful error handling: log SMTP failures without crashing main operation
+- [x] 6.8 Add `--notify-email` CLI flag to enable email notifications
+- [x] 6.9 Add `--no-notify` CLI flag to disable all notifications
 
 ## 7. Desktop Notifications
 
-- [ ] 7.1 Install and configure `plyer` library for cross-platform desktop notifications
-- [ ] 7.2 Implement Windows toast notification (via plyer's Windows backend)
-- [ ] 7.3 Implement macOS NotificationCenter notification (via plyer's macOS backend)
-- [ ] 7.4 Implement Linux freedesktop notification (via plyer's Linux backend)
-- [ ] 7.5 Create default notification content: title "GitHub Push Successful", body with repo/branch, click action
-- [ ] 7.6 Implement graceful fallback: log warning if desktop notifications unavailable
-- [ ] 7.7 Add `--notify-desktop` CLI flag to enable desktop notifications
+- [x] 7.1 Install and configure `plyer` library for cross-platform desktop notifications
+- [x] 7.2 Implement Windows toast notification (via plyer's Windows backend)
+- [x] 7.3 Implement macOS NotificationCenter notification (via plyer's macOS backend)
+- [x] 7.4 Implement Linux freedesktop notification (via plyer's Linux backend)
+- [x] 7.5 Create default notification content: title "GitHub Push Successful", body with repo/branch, click action
+- [x] 7.6 Implement graceful fallback: log warning if desktop notifications unavailable
+- [x] 7.7 Add `--notify-desktop` CLI flag to enable desktop notifications
 
 ## 8. Webhook Notifications
 
-- [ ] 8.1 Create webhook notification module using `httpx` for async HTTP requests
-- [ ] 8.2 Define default webhook payload schema: {status, repository, branch, commit_sha, attempts, duration, timestamp}
-- [ ] 8.3 Implement `{{variable}}` JSON template substitution for custom webhook payloads
-- [ ] 8.4 Implement concurrent webhook delivery to multiple URLs using `asyncio.gather()`
-- [ ] 8.5 Add support for custom HTTP headers (e.g., Authorization) in webhook config
-- [ ] 8.6 Set 10-second timeout for webhook requests to prevent hanging
-- [ ] 8.7 Implement graceful error handling: log non-2xx responses without retrying
-- [ ] 8.8 Add `--notify-webhook <url>` CLI flag to enable webhook notifications (multiple allowed)
+- [x] 8.1 Create webhook notification module using `httpx` for async HTTP requests
+- [x] 8.2 Define default webhook payload schema: {status, repository, branch, commit_sha, attempts, duration, timestamp}
+- [x] 8.3 Implement `{{variable}}` JSON template substitution for custom webhook payloads
+- [x] 8.4 Implement concurrent webhook delivery to multiple URLs using `asyncio.gather()`
+- [x] 8.5 Add support for custom HTTP headers (e.g., Authorization) in webhook config
+- [x] 8.6 Set 10-second timeout for webhook requests to prevent hanging
+- [x] 8.7 Implement graceful error handling: log non-2xx responses without retrying
+- [x] 8.8 Add `--notify-webhook <url>` CLI flag to enable webhook notifications (multiple allowed)
 
 ## 9. CLI Interface and Commands
 
-- [ ] 9.1 Implement main `git-submit` command with help text and usage examples
-- [ ] 9.2 Implement `git-submit push` command with flags: --remote, --branch, --all, --retry-delay, --max-backoff, --linear-retry
-- [ ] 9.3 Implement notification channel flags: --notify-email, --notify-desktop, --notify-webhook, --no-notify
-- [ ] 9.4 Implement logging control flags: --verbose, --quiet, --json, --follow
-- [ ] 9.5 Add `--force` flag support with confirmation prompt for dangerous operations
-- [ ] 9.6 Implement auto-detection of current branch when --branch flag omitted
-- [ ] 9.7 Implement `git-submit push --all` to push all branches via `git push --all`
-- [ ] 9.8 Implement command-specific help: `git-submit push --help` shows push-related flags
-- [ ] 9.9 Implement `git-submit help examples` command displaying common usage patterns
-- [ ] 9.10 Implement `git-submit history` command to list recent completed operations with timestamps
+- [x] 9.1 Implement main `git-submit` command with help text and usage examples
+- [x] 9.2 Implement `git-submit push` command with flags: --remote, --branch, --all, --retry-delay, --max-backoff, --linear-retry
+- [x] 9.3 Implement notification channel flags: --notify-email, --notify-desktop, --notify-webhook, --no-notify
+- [x] 9.4 Implement logging control flags: --verbose, --quiet, --json, --follow
+- [x] 9.5 Add `--force` flag support with confirmation prompt for dangerous operations
+- [x] 9.6 Implement auto-detection of current branch when --branch flag omitted
+- [x] 9.7 Implement `git-submit push --all` to push all branches via `git push --all`
+- [x] 9.8 Implement command-specific help: `git-submit push --help` shows push-related flags
+- [x] 9.9 Implement `git-submit help examples` command displaying common usage patterns
+- [x] 9.10 Implement `git-submit history` command to list recent completed operations with timestamps
 
 ## 10. Error Handling and Edge Cases
 
-- [ ] 10.1 Handle git executable not in PATH: detect on startup, fail fast with installation instructions
-- [ ] 10.2 Support `GIT_EXEC_PATH` environment variable to override git binary location
-- [ ] 10.3 Handle invalid config file syntax: validate on startup, show clear error message
-- [ ] 10.4 Handle missing required config fields: use defaults, log warning
-- [ ] 10.5 Handle template validation errors: fail fast with missing variable hints
-- [ ] 10.6 Handle network timeouts: increase backoff interval and retry
-- [ ] 10.7 Handle authentication failures (401/403): retry indefinitely assuming credentials may refresh
-- [ ] 10.8 Handle keyboard interrupts (Ctrl+C): cleanup state files, exit gracefully with message
+- [x] 10.1 Handle git executable not in PATH: detect on startup, fail fast with installation instructions
+- [x] 10.2 Support `GIT_EXEC_PATH` environment variable to override git binary location
+- [x] 10.3 Handle invalid config file syntax: validate on startup, show clear error message
+- [x] 10.4 Handle missing required config fields: use defaults, log warning
+- [x] 10.5 Handle template validation errors: fail fast with missing variable hints
+- [x] 10.6 Handle network timeouts: increase backoff interval and retry
+- [x] 10.7 Handle authentication failures (401/403): retry indefinitely assuming credentials may refresh
+- [x] 10.8 Handle keyboard interrupts (Ctrl+C): cleanup state files, exit gracefully with message
 
 ## 11. Testing
 
-- [ ] 11.1 Write unit tests for configuration loading and validation
-- [ ] 11.2 Write unit tests for exponential backoff calculation with jitter
-- [ ] 11.3 Write unit tests for state file persistence (create, update, cleanup)
-- [ ] 11.4 Write unit tests for log entry formatting and file rotation
+- [x] 11.1 Write unit tests for configuration loading and validation
+- [x] 11.2 Write unit tests for exponential backoff calculation with jitter
+- [x] 11.3 Write unit tests for state file persistence (create, update, cleanup)
+- [x] 11.4 Write unit tests for log entry formatting and file rotation
 - [ ] 11.5 Write unit tests for email notification with mocked SMTP server
 - [ ] 11.6 Write unit tests for webhook notification with mocked HTTP responses
 - [ ] 11.7 Write integration tests for retry loop with simulated git failures
 - [ ] 11.8 Write integration tests for resume functionality (state file recovery)
 - [ ] 11.9 Add end-to-end test: full workflow with real git repository (optional, manual test)
-- [ ] 11.10 Set up test coverage reporting (aim for >80% coverage)
+- [x] 11.10 Set up test coverage reporting (aim for >80% coverage)
 
 ## 12. Documentation
 

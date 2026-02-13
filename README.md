@@ -65,6 +65,11 @@ notifications:
         Authorization: "Bearer token"
 ```
 
+## Repository
+
+- **GitHub**: https://github.com/Yizai30/git-does-not-cost-life
+- **Gitee**: https://gitee.com/Yizai30/git-does-not-cost-life
+
 ## License
 
 MIT License - see LICENSE file for details.

@@ -45,9 +45,9 @@ dev = [
 git-submit = "git_submit.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/yourusername/git-submit"
-Repository = "https://github.com/yourusername/git-submit"
-Issues = "https://github.com/yourusername/git-submit/issues"
+Homepage = "https://github.com/Yizai30/git-does-not-cost-life"
+Repository = "https://github.com/Yizai30/git-does-not-cost-life"
+Issues = "https://github.com/Yizai30/git-does-not-cost-life/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]
