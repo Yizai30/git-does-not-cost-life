@@ -13,6 +13,11 @@ from git_submit.config_commands import (
     cmd_validate as config_validate,
     cmd_show as config_show,
 )
+from git_submit.status_commands import (
+    cmd_status,
+    cmd_cleanup,
+    cmd_history,
+)
 from git_submit.git_wrapper import (
     check_git_available,
     get_current_branch,
@@ -245,86 +250,17 @@ def send_notifications(config, repo: str, branch: str, commit_sha: str, attempts
 
 def cmd_status(args) -> int:
     """Show operation status."""
-    if args.orphaned:
-        # List orphaned state files
-        states = [load_state(path.stem) for path in list_state_files()]
-        orphaned = [s for s in states if s and is_orphaned(s)]
-
-        if not orphaned:
-            print("No orphaned state files found.")
-            return 0
-
-        print(f"Orphaned state files ({len(orphaned)}):")
-        for state in orphaned:
-            age = (datetime.now() - datetime.fromisoformat(state.started_at)).days
-            print(f"  - {state.operation_id}: {state.repository}/{state.branch} ({age} days old)")
-        return 0
-    else:
-        # Show active operation
-        states = [load_state(path.stem) for path in list_state_files()]
-        active = [s for s in states if s]
-
-        if not active:
-            print("No active operations found.")
-            return 0
-
-        print(f"Active operations ({len(active)}):")
-        for state in active:
-            print(f"  - {state.operation_id}:")
-            print(f"      Repository: {state.repository}")
-            print(f"      Branch: {state.branch}")
-            print(f"      Attempts: {state.attempts}")
-            print(f"      Started: {state.started_at}")
-            if state.last_error:
-                print(f"      Last error: {state.last_error[:80]}...")
-
-        return 0
+    return cmd_status(orphaned=args.orphaned)
 
 
 def cmd_cleanup(args) -> int:
     """Remove orphaned state files."""
-    from datetime import datetime
-
-    states = [load_state(path.stem) for path in list_state_files()]
-    orphaned = [s for s in states if s and is_orphaned(s)]
-
-    if not orphaned:
-        print("No orphaned state files to clean up.")
-        return 0
-
-    from git_submit.state_manager import delete_state
-    for state in orphaned:
-        delete_state(state.operation_id)
-
-    print(f"Removed {len(orphaned)} orphaned state file(s).")
-    return 0
+    return cmd_cleanup()
 
 
 def cmd_history(args) -> int:
     """Show recent operations."""
-    from git_submit.logging import tail_log, LOG_DIR
-
-    # Get all log files
-    log_files = list(LOG_DIR.glob("*.log"))
-
-    if not log_files:
-        print("No operation history found.")
-        return 0
-
-    # Sort by modification time
-    log_files.sort(key=lambda p: p.stat().st_mtime, reverse=True)
-
-    # Show last 10 operations
-    print("Recent operations (last 10):")
-    for log_file in log_files[:10]:
-        entries = tail_log(log_file, lines=1)
-        if entries:
-            entry = entries[0]
-            timestamp = entry.data.get("timestamp", "")
-            event = entry.data.get("event", "")
-            print(f"  - [{timestamp}] {event}")
-
-    return 0
+    return cmd_history()
 
 
 def cmd_help_examples(args) -> int:
