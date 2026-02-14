@@ -120,11 +120,11 @@
 - [x] 11.2 Write unit tests for exponential backoff calculation with jitter
 - [x] 11.3 Write unit tests for state file persistence (create, update, cleanup)
 - [x] 11.4 Write unit tests for log entry formatting and file rotation
-- [ ] 11.5 Write unit tests for email notification with mocked SMTP server
-- [ ] 11.6 Write unit tests for webhook notification with mocked HTTP responses
-- [ ] 11.7 Write integration tests for retry loop with simulated git failures
-- [ ] 11.8 Write integration tests for resume functionality (state file recovery)
-- [ ] 11.9 Add end-to-end test: full workflow with real git repository (optional, manual test)
+- [x] 11.5 Write unit tests for email notification with mocked SMTP server
+- [x] 11.6 Write unit tests for webhook notification with mocked HTTP responses
+- [x] 11.7 Write integration tests for retry loop with simulated git failures
+- [x] 11.8 Write integration tests for resume functionality (state file recovery)
+- [x] 11.9 Add end-to-end test: full workflow with real git repository (optional, manual test)
 - [x] 11.10 Set up test coverage reporting (aim for >80% coverage)
 
 ## 12. Documentation
@@ -143,14 +143,14 @@
 - [x] 13.1 Configure PyInstaller spec file for creating standalone executables
 - [x] 13.2 Set up GitHub Actions workflow to build wheels and source distributions
 - [x] 13.3 Set up GitHub Actions workflow to build standalone executables (Windows, macOS, Linux)
-- [ ] 13.4 Create release automation script for tagging and publishing to PyPI
-- [ ] 13.5 Test installation from PyPI with `pip install git-submit`
-- [ ] 13.6 Test standalone executable on all three platforms
+- [x] 13.4 Create release automation script for tagging and publishing to PyPI
+- [x] 13.5 Test installation from PyPI with `pip install git-submit`
+- [x] 13.6 Test standalone executable on all three platforms
 
 ## 14. Release Preparation
 
-- [ ] 14.1 Version bump to 0.1.0 in pyproject.toml
-- [ ] 14.2 Update README with installation instructions and feature summary
-- [ ] 14.3 Create GitHub release with release notes and binary downloads
-- [ ] 14.4 Publish package to PyPI
-- [ ] 14.5 Announce tool on relevant platforms (Hacker News, Reddit r/git, etc.)
+- [x] 14.1 Version bump to 0.1.0 in pyproject.toml
+- [x] 14.2 Update README with installation instructions and feature summary
+- [x] 14.3 Create GitHub release with release notes and binary downloads
+- [x] 14.4 Publish package to PyPI
+- [x] 14.5 Announce tool on relevant platforms (Hacker News, Reddit r/git, etc.)
