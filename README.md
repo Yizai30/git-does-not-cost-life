@@ -9,6 +9,7 @@ Automated git push with infinite retry logic and multi-channel notifications.
 - **Multi-channel notifications**: Get notified via email, desktop notifications, or webhooks when push succeeds
 - **State persistence**: Resume from where you left off after system reboots or interruptions
 - **Zero intervention**: Once triggered, handles all retries automatically
+- **Cross-platform**: Works on Windows, macOS, and Linux
 
 ## Installation
 
@@ -35,35 +36,11 @@ git-submit push --notify-desktop
 git-submit push --notify-email
 ```
 
-## Configuration
+## Documentation
 
-Configuration is stored in `~/.git-submit/config.yaml`:
-
-```yaml
-retry:
-  initial_delay_seconds: 5
-  max_backoff_seconds: 300
-
-git:
-  remote: origin
-  branch: auto  # auto-detect current branch
-
-notifications:
-  desktop:
-    enabled: true
-  email:
-    enabled: false
-    smtp_host: smtp.example.com
-    smtp_port: 587
-    username: user@example.com
-    password_env: SMTP_PASSWORD
-    from: git-submit@example.com
-    to: developer@example.com
-  webhooks:
-    - url: https://hooks.slack.com/services/...
-      headers:
-        Authorization: "Bearer token"
-```
+- [Configuration Reference](docs/CONFIG_REFERENCE.md) - Full configuration options
+- [Troubleshooting Guide](docs/TROUBLESHOOTING.md) - Common issues and solutions
+- [Contributing Guidelines](CONTRIBUTING.md) - Development setup
 
 ## Repository
 

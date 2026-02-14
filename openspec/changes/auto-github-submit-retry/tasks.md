@@ -129,20 +129,20 @@
 
 ## 12. Documentation
 
-- [ ] 12.1 Write README.md with installation instructions, quick start guide, and examples
-- [ ] 12.2 Document configuration file schema with all options and defaults
-- [ ] 12.3 Create CLI reference documentation for all commands and flags
-- [ ] 12.4 Write troubleshooting guide for common issues (git not found, SMTP failures, etc.)
-- [ ] 12.5 Document SSH agent requirement for key-based authentication
-- [ ] 12.6 Add example configuration files for common use cases (email only, desktop + webhook, etc.)
-- [ ] 12.7 Create CHANGELOG.md following Keep a Changelog format
-- [ ] 12.8 Add Contributing Guidelines for developers
+- [x] 12.1 Write README.md with installation instructions, quick start guide, and examples
+- [x] 12.2 Document configuration file schema with all options and defaults
+- [x] 12.3 Create CLI reference documentation for all commands and flags
+- [x] 12.4 Write troubleshooting guide for common issues (git not found, SMTP failures, etc.)
+- [x] 12.5 Document SSH agent requirement for key-based authentication
+- [x] 12.6 Add example configuration files for common use cases (email only, desktop + webhook, etc.)
+- [x] 12.7 Create CHANGELOG.md following Keep a Changelog format
+- [x] 12.8 Add Contributing Guidelines for developers
 
 ## 13. Distribution and Packaging
 
-- [ ] 13.1 Configure PyInstaller spec file for creating standalone executables
-- [ ] 13.2 Set up GitHub Actions workflow to build wheels and source distributions
-- [ ] 13.3 Set up GitHub Actions workflow to build standalone executables (Windows, macOS, Linux)
+- [x] 13.1 Configure PyInstaller spec file for creating standalone executables
+- [x] 13.2 Set up GitHub Actions workflow to build wheels and source distributions
+- [x] 13.3 Set up GitHub Actions workflow to build standalone executables (Windows, macOS, Linux)
 - [ ] 13.4 Create release automation script for tagging and publishing to PyPI
 - [ ] 13.5 Test installation from PyPI with `pip install git-submit`
 - [ ] 13.6 Test standalone executable on all three platforms
