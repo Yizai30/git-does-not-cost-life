@@ -5,6 +5,26 @@ import os
 import sys
 from pathlib import Path
 
+# Set UTF-8 encoding for Windows console (only if not already set)
+if sys.platform == "win32":
+    try:
+        import locale
+        if sys.stdout.encoding.lower() != 'utf-8':
+            # Reconfigure console to use UTF-8
+            import _locale
+            _locale._getdefaultlocale = lambda *args: ['en_US', 'utf8']
+            sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+            sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+    except (AttributeError, Exception):
+        # If reconfigure is not available, try legacy method
+        try:
+            import io
+            if hasattr(sys.stdout, 'buffer'):
+                sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+                sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+        except:
+            pass
+
 from git_submit.cli_args import parse_args, merge_args_with_config
 from git_submit.config_loader import load_config, ConfigLoadError
 from git_submit.config_commands import (
@@ -34,7 +54,7 @@ from git_submit.state_manager import (
     OperationState,
 )
 from git_submit.retry_engine import RetryEngine, RetryState
-from git_submit.logging import Logger, LogLevel, tail_log
+from git_submit.log_handler import Logger, LogLevel, tail_log
 
 
 def cmd_push(args, config) -> int:
@@ -100,7 +120,13 @@ def cmd_push(args, config) -> int:
     existing_state = load_state(operation_id)
     if existing_state:
         logger.info("Resuming from previous operation", attempts=existing_state.attempts)
-        retry_state = existing_state
+        # Convert OperationState to RetryState
+        retry_state = RetryState(
+            attempt=existing_state.attempts,
+            last_error=existing_state.last_error,
+            started_at=time.mktime(time.strptime(existing_state.started_at, "%Y-%m-%dT%H:%M:%SZ")),
+            last_attempt_at=time.mktime(time.strptime(existing_state.last_attempt_at, "%Y-%m-%dT%H:%M:%SZ")),
+        )
     else:
         # Create new state
         state = create_state(repository=repo_path, branch=branch, remote=remote)
@@ -144,7 +170,7 @@ def cmd_push(args, config) -> int:
 
         # Follow mode: tail log file
         if args.follow:
-            from git_submit.logging import LOG_DIR
+            from git_submit.log_handler import LOG_DIR
             log_file = LOG_DIR / f"{operation_id}.log"
             entries = tail_log(log_file, lines=5)
             for entry in entries:
@@ -250,17 +276,20 @@ def send_notifications(config, repo: str, branch: str, commit_sha: str, attempts
 
 def cmd_status(args) -> int:
     """Show operation status."""
-    return cmd_status(orphaned=args.orphaned)
+    from git_submit.status_commands import cmd_status as status_cmd
+    return status_cmd(orphaned=args.orphaned)
 
 
 def cmd_cleanup(args) -> int:
     """Remove orphaned state files."""
-    return cmd_cleanup()
+    from git_submit.status_commands import cmd_cleanup as cleanup_cmd
+    return cleanup_cmd()
 
 
 def cmd_history(args) -> int:
     """Show recent operations."""
-    return cmd_history()
+    from git_submit.status_commands import cmd_history as history_cmd
+    return history_cmd()
 
 
 def cmd_help_examples(args) -> int:
@@ -325,11 +354,66 @@ def main() -> int:
 
     # Dispatch command
     if not args.command or args.command == "help":
-        if args.topic == "examples":
+        if hasattr(args, 'topic') and args.topic == "examples":
             return cmd_help_examples(args)
         else:
-            from git_submit.cli_args import parse_args
-            parse_args(["--help"])
+            # Show help - recreate parser and display it
+            import argparse
+            parser = argparse.ArgumentParser(
+                prog="git-submit",
+                description="Automated git push with infinite retry logic and notifications",
+                formatter_class=argparse.RawDescriptionHelpFormatter,
+            )
+            subparsers = parser.add_subparsers(dest="command", help="Available commands")
+
+            # Push command
+            push_parser = subparsers.add_parser("push", help="Push to git with automatic retries")
+            git_group = push_parser.add_argument_group("Git Options")
+            git_group.add_argument("--remote", help="Remote to push to")
+            git_group.add_argument("--branch", help="Branch to push")
+            git_group.add_argument("--all", action="store_true", help="Push all branches")
+            git_group.add_argument("--force", "-f", action="store_true", help="Force push")
+            git_group.add_argument("--dry-run", action="store_true", help="Validate without pushing")
+
+            retry_group = push_parser.add_argument_group("Retry Options")
+            retry_group.add_argument("--max-retries", type=int, help="Maximum retry attempts (0=infinite)")
+            retry_group.add_argument("--initial-delay", type=int, help="Initial retry delay in seconds")
+            retry_group.add_argument("--max-backoff", type=int, help="Maximum backoff time in seconds")
+            retry_group.add_argument("--linear", action="store_true", help="Use linear backoff")
+
+            notify_group = push_parser.add_argument_group("Notification Options")
+            notify_group.add_argument("--notify-desktop", action="store_true", help="Enable desktop notifications")
+            notify_group.add_argument("--notify-email", action="store_true", help="Enable email notifications")
+            notify_group.add_argument("--notify-webhook", action="store_true", help="Enable webhook notifications")
+
+            output_group = push_parser.add_argument_group("Output Options")
+            output_group.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
+            output_group.add_argument("--quiet", "-q", action="store_true", help="Suppress output")
+            output_group.add_argument("--follow", "-f", action="store_true", help="Follow log output")
+
+            # Config command
+            config_parser = subparsers.add_parser("config", help="Configuration management")
+            config_subparsers = config_parser.add_subparsers(dest="config_command")
+            config_subparsers.add_parser("init", help="Initialize configuration")
+            config_subparsers.add_parser("edit", help="Edit configuration")
+            config_subparsers.add_parser("validate", help="Validate configuration")
+            config_subparsers.add_parser("show", help="Show configuration")
+
+            # Status command
+            status_parser = subparsers.add_parser("status", help="Show operation status")
+            status_parser.add_argument("--orphaned", action="store_true", help="Show orphaned operations")
+
+            # Cleanup command
+            subparsers.add_parser("cleanup", help="Remove orphaned state files")
+
+            # History command
+            subparsers.add_parser("history", help="Show operation history")
+
+            # Help command
+            help_parser = subparsers.add_parser("help", help="Show help")
+            help_parser.add_argument("--topic", choices=["examples"], help="Help topic")
+
+            parser.print_help()
             return 0
 
     if args.command == "config":

@@ -8,7 +8,27 @@
       "Bash(git commit:*)",
       "Bash(git remote add:*)",
       "Bash(git push:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(del:*)",
+      "Bash(taskkill:*)",
+      "Bash(findstr:*)",
+      "Bash(set SMTP_PASSWORD=test:*)",
+      "Bash(cd:*)",
+      "Bash(git-submit config:*)",
+      "Bash(echo Creating batch file instead...:*)",
+      "Bash(git-submit.cmd config:*)",
+      "Bash(pip uninstall:*)",
+      "Bash(echo Checking available Python versions:*)",
+      "Bash(echo Available Python installations:*)",
+      "WebSearch",
+      "Bash(py:*)",
+      "Bash(cat:*)",
+      "Bash(echo:*)",
+      "Bash(ls:*)",
+      "Bash(which:*)",
+      "Bash(git-submit.bat:*)",
+      "Bash(/c/Users/HP/AppData/Local/Programs/Python/Python311/Scripts/git-submit.exe:*)",
+      "Bash(git-submit:*)"
     ]
   }
 }

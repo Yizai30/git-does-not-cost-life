@@ -42,7 +42,7 @@ dev = [
 ]
 
 [project.scripts]
-git-submit = "git_submit.cli:main"
+git-submit = "git_submit.cli_wrapper:main"
 
 [project.urls]
 Homepage = "https://github.com/Yizai30/git-does-not-cost-life"

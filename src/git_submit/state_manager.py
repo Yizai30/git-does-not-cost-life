@@ -197,7 +197,12 @@ def is_orphaned(state: OperationState, max_age_hours: int = 24) -> bool:
 
     try:
         started = datetime.fromisoformat(state.started_at)
-        age = datetime.now() - started
+        # Handle timezone-aware datetimes
+        if started.tzinfo is not None:
+            now = datetime.now(started.tzinfo)
+        else:
+            now = datetime.now()
+        age = now - started
         return age > timedelta(hours=max_age_hours)
     except (ValueError, OSError):
         return False

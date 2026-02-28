@@ -11,7 +11,7 @@ from git_submit.state_manager import (
     is_orphaned,
     OperationState,
 )
-from git_submit.logging import Logger, LogLevel, LogEntry
+from git_submit.log_handler import Logger, LogLevel, LogEntry
 
 
 def cmd_status(orphaned: bool = False) -> int:
@@ -71,7 +71,7 @@ def cmd_cleanup() -> int:
 
 def cmd_history() -> int:
     """Show recent operations."""
-    from git_submit.logging import tail_log, LOG_DIR
+    from git_submit.log_handler import tail_log, LOG_DIR
 
     # Get all log files
     log_files = list(LOG_DIR.glob("*.log"))
